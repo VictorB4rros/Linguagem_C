@@ -40,3 +40,65 @@ void insertionSort (int vetor[], int n) {
         vetor[j] = auxiliar;
     }
 }
+
+
+// A rotina merge mescla dois sub vetores do vetor "vet"
+// O primeiro sub vetor é vet[inicio ... meio]
+// O segundo sub vetor é vet[meio+1 ... fim]
+void merge (int vet[], int inicio, int meio, int fim) {
+    int i, j, k;
+    int n1 = meio - inicio + 1;
+    int n2 = fim - meio;
+
+    // Criação dos vetores temporários com o tamanho das duas metades do vetor original
+    int esquerda[n1], direita[n2];
+
+    // Copia os dados do vetor original para os vetores temporários
+    for (i = 0; i < n1; i++)
+        esquerda[i] = vet[inicio + i];
+    for (j = 0; j < n2; j++)
+        direita[j] = vet[meio + 1 + j];
+
+    // Mescla os vetores temporários de volta ao vetor original
+    i = 0;
+    j = 0;
+    k = inicio;
+    while (i < n1 && j < n2) {
+        if (esquerda[i] <= direita[j]) {
+            vet[k] = esquerda[i];
+            i++;
+        }
+        else {
+            vet[k] = direita[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copia os elementos restantes de esquerda, se houver algum
+    while (i < n1) {
+        vet[k] = esquerda[i];
+        i++;
+        k++;
+    }
+
+    // Copia os elementos restantes de direita, se houver algum
+    while (j < n2) {
+        vet[k] = direita[j];
+        j++;
+        k++;
+    }
+}
+
+// inicio é o primeiro elemento do vetor e fim é o último elemento do vetor
+void mergeSort (int vet[], int inicio, int fim) {
+    if ( inicio < fim ) {
+        int meio = inicio + (fim - inicio) / 2;
+
+        // ordena recursivamente a primeira e segunda metades do vetor
+        mergeSort (vet, inicio, meio);
+        mergeSort (vet, meio + 1, fim);
+
+        merge (vet, inicio, meio, fim);
+    }
+}
