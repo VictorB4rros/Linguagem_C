@@ -102,3 +102,35 @@ void mergeSort (int vet[], int inicio, int fim) {
         merge (vet, inicio, meio, fim);
     }
 }
+
+void troca (int * a, int * b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int divisao (int vet[], int baixo, int alto) {
+    // Escolha do pivô
+    int pivot = vet[alto];
+
+    int i = baixo - 1;
+
+    for (int j = baixo; j <= alto - 1; j++) {
+        if ( vet[j] < pivot) {
+            i++;
+            troca (&vet[i], &vet[j]);
+        }
+    }
+
+    troca (&vet[i+1], &vet[alto]);
+    return (i+1);
+}
+
+void quickSort (int vet[], int baixo, int alto) {
+    if (baixo < alto) {
+        int posicaoDoPivot = divisao (vet, baixo, alto);
+
+        quickSort (vet, baixo, posicaoDoPivot - 1);
+        quickSort (vet, posicaoDoPivot + 1, alto);
+    }
+}
