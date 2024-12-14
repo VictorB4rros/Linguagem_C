@@ -171,10 +171,43 @@ void sift (int vet[], int n, int i) {
     }
 }
 
+// Sift não recursivo
+void siftNaoRecursivo (int vet[], int n, int i) {
+    while (1) {
+        // inicializa o maior elemento como raíz da árvore
+        int maior = i;
+
+        int filhoEsquerda = 2 * i + 1;
+        int filhoDireita = 2 * i + 2;
+
+        // Se o filho da esquerda for maior do que a raíz, o índice dele é selecionado como maior
+        if (filhoEsquerda < n && vet[filhoEsquerda] > vet[maior]) 
+        maior = filhoEsquerda;
+
+        // Se o filho da direita for maior do que o maior até agora, o índice dele é selecionado como maior
+        if (filhoDireita < n && vet[filhoDireita] > vet[maior])
+        maior = filhoDireita;
+
+        // Se o maior ainda for a raíz, o heap já está ajustado
+        if (maior == i)
+            break;
+        
+        // Se o índice do maior for diferente do índice da raíz, executa a troca
+        if (maior != i) {
+            int temp = vet[i];
+            vet[i] = vet[maior];
+            vet[maior] = temp;
+        }
+
+        // Atualiza o índice para continuar ajustando a subárvore afetada
+        i = maior;
+    }    
+}
+
 void heapSort (int vet [], int n) {
     // Construindo o heap
     for (int i = n / 2 - 1; i >= 0; i--) {
-        sift (vet, n, i);
+        siftNaoRecursivo (vet, n, i);
     }
 
     // Extrai um elemento do heap a cada iteração
@@ -186,6 +219,7 @@ void heapSort (int vet [], int n) {
         vet[i] = temp;
 
         // Sift é chamado para arrumar o heap reduzido
-        sift (vet, i, 0);
+        siftNaoRecursivo (vet, i, 0);
     }
 }
+
