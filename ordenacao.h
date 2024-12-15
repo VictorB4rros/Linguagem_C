@@ -223,3 +223,51 @@ void heapSort (int vet [], int n) {
     }
 }
 
+// Função auxiliar para achar o maior valor de um vetor
+// Será usada no Radix Sort
+int max (int vet[], int n) {
+    int maximo = vet[0];
+    for (int i = 1; i < n; i++) {
+        if (vet[i] > maximo) 
+            maximo = vet[i];
+    }
+    return maximo;
+}
+
+void countSort (int vet[], int n, int exp) {
+    int output[n];
+    int contagem[10] = {0};
+
+    // Armazena a contagem de ocorrências de cada dígito
+    for (int i = 0; i < n; i++) {
+        contagem[(vet[i] / exp) % 10]++;
+    }
+
+    // Modifica contagem[i] para conter as posições finais no vetor output[]
+    for (int i = 1; i < 10; i++) {
+        contagem[i] += contagem[i - 1];
+        // Agora, contagem[i] indica o índice do último elemento com o dígito 'i' no vetor output[]
+    }
+
+    // Constrói o vetor de saída, processando os elementos do vetor original de trás para frente
+    for (int i = n - 1; i >= 0; i--) {
+        output[contagem[(vet[i] / exp) % 10] - 1] = vet[i];
+        contagem[(vet[i] / exp) % 10]--;
+        // Cada elemento é colocado na posição correta no vetor de saída.
+        // Após a colocação, decrementa-se o índice correspondente no vetor contagem[]
+    }
+
+    // Copia o vetor de saída de volta para vet[], para que o vetor original
+    // fique ordenado com base no dígito atual
+    for (int i = 0; i < n; i++) {
+        vet[i] = output[i];
+    }
+}
+
+void radixSort (int vet[], int n) {
+    int maior = max (vet, n);
+
+    for (int exp = 1; maior / exp > 0; exp *= 10) {
+        countSort (vet, n, exp);
+    }
+}
