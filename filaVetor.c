@@ -11,12 +11,16 @@
 // Tipos de dados definidos pelo programador
 typedef struct Fila {
     int dados[MAX_QUEUE_SIZE]; // vetor que será utilizado para a fila
+    int inicio;
+    int fim;
     int size; // variável que armazena o tamanho do vetor, conforme elementos forem adicionados
 } Fila;
 
 // Funções auxiliares
 void inicializar (Fila *fila) {
     fila->size = 0; // inicializa o campo size como 0, pois a fila está vazia
+    fila->inicio = 0;
+    fila->fim = 0;
 }
 
 // Função para inserir um elemento na fila
@@ -26,7 +30,8 @@ int inserir (Fila *fila, int elemento) {
         return 0; // Falha na inserção
     }
 
-    fila->dados[fila->size] = elemento;
+    fila->dados[fila->fim] = elemento;
+    fila->fim = (fila->fim + 1) % MAX_QUEUE_SIZE;
     fila->size++; // Atualiza o campo size
     return 1; // Sucesso na inserção
 }
@@ -38,10 +43,7 @@ int remover (Fila *fila) {
         return 0;
     }
 
-    for (int i = 0; i < fila->size; i++) {
-        fila->dados[i] = fila->dados[i + 1];
-    }
-
+    fila->inicio = (fila->inicio + 1) % MAX_QUEUE_SIZE;
     fila->size--;
     return 1; // Sucesso na remoção do dado
 }
@@ -54,7 +56,8 @@ void exibir (Fila *fila) {
     }
     printf ("\n Elementos da fila:\n");
     for (int i = 0; i < fila->size; i++) {
-        printf (" Elemento[%d]: %d\n", i, fila->dados[i]);
+        int indice = (fila->inicio + i) % MAX_QUEUE_SIZE;
+        printf (" Elemento[%d]: %d\n", i, fila->dados[indice]);
     }
 }
 
